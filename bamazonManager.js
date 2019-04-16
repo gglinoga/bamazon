@@ -3,8 +3,8 @@ var inquirer = require('inquirer');
 
 var connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: '!xobile1', //.env?
+    user: 'user',
+    password: 'password', //.env?
     database: 'bamazon'
 });
 
@@ -56,7 +56,10 @@ function mainMenu() {
 function viewAllProducts() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        console.log('\n');
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].item_id, res[i].product_name, res[i].price);
+        }
     });
     mainMenu();
 };
@@ -64,7 +67,10 @@ function viewAllProducts() {
 function viewLowInventory() {
     connection.query("SELECT * FROM products WHERE stock_quantity < 5", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        console.log('\n');
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].item_id, res[i].product_name, res[i].price);
+        }
     });
     mainMenu();
 };

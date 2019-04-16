@@ -17,7 +17,9 @@ connection.connect(function (err) {
 function afterConnection() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].item_id, res[i].product_name, res[i].price);
+        }
         askCustomer();
 
     });
@@ -50,7 +52,7 @@ function askCustomer() {
                     ],
                     function (err) {
                         if (err) throw err;
-                        console.log(`You have purchased ${answer.quantity} ${answer.itemToBuy}!\nYour order cost $${res[0].price*answer.quantity}`  )
+                        console.log(`You have purchased ${answer.quantity} ${answer.itemToBuy}!\nYour order cost $${res[0].price*answer.quantity}`)
                     }
                 )
                 console.log(query.sql);
@@ -60,15 +62,3 @@ function askCustomer() {
         });
     });
 };
-// askCustomer = function() {
-//     inquirer.prompt({
-//         name: "itemToBuy",
-//         type: "input",
-//         message: "Which item would you like to purchase?"
-
-//     })
-// }
-
-// buyItem = function() {
-
-// }
