@@ -1,0 +1,74 @@
+var mysql = require('mysql');
+var inquirer = require('inquirer');
+
+var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '!xobile1', //.env?
+    database: 'bamazon'
+});
+
+connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected as id " + connection.threadId + "\n");
+    afterConnection();
+});
+
+function afterConnection() {
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        console.log(res);
+        askCustomer();
+
+    });
+};
+
+function askCustomer() {
+    inquirer.prompt([{
+            name: 'itemToBuy',
+            type: 'input',
+            message: 'Which item would you like to purchase?'
+        },
+        {
+            name: 'quantity',
+            type: 'input',
+            message: 'How many would you like to buy?'
+        }
+    ]).then(function (answer) {
+        var query = `SELECT * FROM products WHERE product_name = '${answer.itemToBuy}'`;
+        connection.query(query, function (err, res) {
+            if (err) throw err;
+            if ((res[0].stock_quantity) > answer.quantity) {
+                var query = connection.query(
+                    'UPDATE products SET ? WHERE ?',
+                    [{
+                            stock_quantity: (res[0].stock_quantity - answer.quantity)
+                        },
+                        {
+                            product_name: answer.itemToBuy
+                        }
+                    ],
+                    function (err) {
+                        if (err) throw err;
+                        console.log(`You have purchased ${answer.quantity} ${answer.itemToBuy}!\nYour order cost $${res[0].price*answer.quantity}`  )
+                    }
+                )
+                console.log(query.sql);
+            } else {
+                console.log('Insufficient quantity!');
+            };
+        });
+    });
+};
+// askCustomer = function() {
+//     inquirer.prompt({
+//         name: "itemToBuy",
+//         type: "input",
+//         message: "Which item would you like to purchase?"
+
+//     })
+// }
+
+// buyItem = function() {
+
+// }
