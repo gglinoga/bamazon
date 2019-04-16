@@ -20,7 +20,7 @@ function afterConnection() {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             arr.push(res[i].product_name)
-            console.log(res[i].item_id, res[i].product_name, res[i].price);
+            console.log(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity);
         }
         askCustomer();
     });

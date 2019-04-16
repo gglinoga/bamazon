@@ -64,7 +64,7 @@ function viewAllProducts() {
         if (err) throw err;
         console.log('\n');
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id, res[i].product_name, res[i].price);
+            console.log(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity);
         }
         mainMenu();
     });
@@ -75,7 +75,7 @@ function viewLowInventory() {
         if (err) throw err;
         console.log('\n');
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id, res[i].product_name, res[i].price);
+            console.log(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity);
         }
         mainMenu();
     });
@@ -99,7 +99,7 @@ function addToInventory() {
                 var query = connection.query(
                     `UPDATE products SET ? WHERE ?`,
                     [{
-                            stock_quantity: (res[0].stock_quantity + answer.quantity)
+                            stock_quantity: (parseInt(res[0].stock_quantity) + parseInt(answer.quantity))
                         },
                         {
                             product_name: answer.product
