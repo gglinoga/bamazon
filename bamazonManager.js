@@ -4,7 +4,7 @@ var inquirer = require('inquirer');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'user',
-    password: 'password', //.env?
+    password: 'password', 
     database: 'bamazon'
 });
 
@@ -13,7 +13,6 @@ connection.connect(function (err) {
     console.log("Connected as id " + connection.threadId + "\n");
     mainMenu();
 });
-
 
 function mainMenu() {
     inquirer

@@ -3,8 +3,8 @@ var inquirer = require('inquirer');
 
 var connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: '!xobile1', //.env?
+    user: 'user',
+    password: 'password', 
     database: 'bamazon'
 });
 
@@ -21,7 +21,6 @@ function afterConnection() {
             console.log(res[i].item_id, res[i].product_name, res[i].price);
         }
         askCustomer();
-
     });
 };
 
