@@ -1,10 +1,11 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+var arr = [];
 
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'user',
-    password: 'password', 
+    password: 'password',
     database: 'bamazon'
 });
 
@@ -18,6 +19,7 @@ function afterConnection() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
+            arr.push(res[i].product_name)
             console.log(res[i].item_id, res[i].product_name, res[i].price);
         }
         askCustomer();
@@ -27,8 +29,9 @@ function afterConnection() {
 function askCustomer() {
     inquirer.prompt([{
             name: 'itemToBuy',
-            type: 'input',
-            message: 'Which item would you like to purchase?'
+            type: 'list',
+            message: 'Which item would you like to purchase?',
+            choices: arr
         },
         {
             name: 'quantity',

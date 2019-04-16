@@ -1,16 +1,23 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+var arr = [];
 
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'user',
-    password: 'password', 
+    password: 'password',
     database: 'bamazon'
 });
 
 connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected as id " + connection.threadId + "\n");
+    connection.query('SELECT * FROM products', function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            arr.push(res[i].product_name)
+        }
+    })
     mainMenu();
 });
 
@@ -59,8 +66,8 @@ function viewAllProducts() {
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].item_id, res[i].product_name, res[i].price);
         }
+        mainMenu();
     });
-    mainMenu();
 };
 
 function viewLowInventory() {
@@ -70,16 +77,17 @@ function viewLowInventory() {
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].item_id, res[i].product_name, res[i].price);
         }
+        mainMenu();
     });
-    mainMenu();
 };
 
 function addToInventory() {
     inquirer
         .prompt([{
             name: "product",
-            type: "input",
-            message: "Enter item to add:"
+            type: "list",
+            message: "Select item to add:",
+            choices: arr
         }, {
             name: "quantity",
             type: "input",
@@ -102,9 +110,9 @@ function addToInventory() {
                         console.log(`You have added ${answer.quantity} ${answer.product}!`);
                     });
                 console.log(query.sql);
+                mainMenu();
             });
         });
-    mainMenu();
 };
 
 function addNewProduct() {
@@ -135,6 +143,6 @@ function addNewProduct() {
                 }
             )
             console.log(query.sql);
+            mainMenu();
         })
-    mainMenu();
 };
